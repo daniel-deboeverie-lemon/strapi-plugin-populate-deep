@@ -50,7 +50,7 @@ const getFullPopulateObject = (modelUid, maxDepth = 20, ignore) => {
   if (ignore && !ignore.includes(model.collectionName))
     ignore.push(model.collectionName);
   for (const [key, value] of Object.entries(
-    getModelPopulationAttributes(model)
+      getModelPopulationAttributes(model)
   )) {
     if (ignore?.includes(key) || value.private === true) continue;
     if (value) {
@@ -61,7 +61,7 @@ const getFullPopulateObject = (modelUid, maxDepth = 20, ignore) => {
           const curPopulate = getFullPopulateObject(cur, maxDepth - 1);
           return curPopulate === true ? prev : deepAssign(prev, curPopulate);
         }, {});
-        populate[key] = isEmpty(dynamicPopulate) ? true : dynamicPopulate;
+        populate[key] = isEmpty(dynamicPopulate) ? true : { on: dynamicPopulate };
       } else if (value.type === "relation") {
         const relationPopulate = getFullPopulateObject(
           value.target,
